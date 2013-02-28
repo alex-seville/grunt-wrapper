@@ -23,34 +23,45 @@ module.exports = function(grunt) {
     var dest;
     var isExpandedPair;
 
-    var header = grunt.file.read(options.header);
-    var footer = grunt.file.read(options.footer);
+    var header = options.header ? grunt.file.read(options.header) : null;
+    var   footer = options.footer ? grunt.file.read(options.footer) : null;
 
-    var startHeadContent = options.headDelimiter[0],
-        endHeadContent = options.headDelimiter[1],
-        insertHeadContent = options.headDelimiter[2],
-        startFooterContent = options.footerDelimiter[0],
-        endFooterContent = options.footerDelimiter[1],
-        insertFooterContent = options.footerDelimiter[2];
+    var startHeadContent = options.headDelimiter ? options.headDelimiter[0] : null,
+          endHeadContent = options.headDelimiter ? options.headDelimiter[1] : null,
+       insertHeadContent = options.headDelimiter ? options.headDelimiter[2] : null,
+       startFooterContent = options.footerDelimiter ? options.footerDelimiter[0] : null,
+        endFooterContent = options.footerDelimiter ? options.footerDelimiter[1] : null,
+     insertFooterContent = options.footerDelimiter ? options.footerDelimiter[2] : null;
 
     this.files.forEach(function(filePair) {
    
       filePair.src.forEach(function(src) {
-          var fileStr = grunt.file.read(src);
+          var fileStr     = grunt.file.read(src);
           var newDest = path.join(filePair.dest, src);
 
-          var iHeadStart = fileStr.indexOf(startHeadContent),
-              iHeadEnd = fileStr.indexOf(endHeadContent,iHeadStart),
-              iFooterStart = fileStr.indexOf(startFooterContent),
-              iFooterEnd = fileStr.indexOf(endFooterContent,iFooterStart),
-              iInsertHead = header.indexOf(insertHeadContent),
-              iInsertFooter = footer.indexOf(insertFooterContent);
+          var newHeader = header;
+          var  newFooter = footer;
 
-          var contentHeader = fileStr.slice(iHeadStart,iHeadEnd),
-                contentFooter = fileStr.slice(iFooterStart,iFooterEnd);
+          var iHeadStart=0,
+              iHeadEnd=0,
+              iFooterStart=0,
+              iFooterEnd=0;
 
-          var newHeader = header.slice(0,iInsertHead)+contentHeader+header.slice(iInsertHead),
-              newFooter = footer.slice(0,iInsertFooter)+contentFooter+footer.slice(iInsertFooter);
+          if (options.headDelimiter){
+              iHeadStart = fileStr.indexOf(startHeadContent);
+                iHeadEnd = fileStr.indexOf(endHeadContent,iHeadStart);
+              var iInsertHead = header.indexOf(insertHeadContent);
+                var contentHeader = fileStr.slice(iHeadStart,iHeadEnd);
+                 newHeader = header.slice(0,iInsertHead)+contentHeader+header.slice(iInsertHead);
+          }
+          if (options.footerDelimiter){
+              iFooterStart = fileStr.indexOf(startFooterContent);
+              iFooterEnd = fileStr.indexOf(endFooterContent,iFooterStart);
+           
+            var  iInsertFooter = footer.indexOf(insertFooterContent);
+             var contentFooter = fileStr.slice(iFooterStart,iFooterEnd);
+             newFooter = footer.slice(0,iInsertFooter)+contentFooter+footer.slice(iInsertFooter);
+           }       
 
           fileStr = fileStr.slice(0,iHeadStart)+fileStr.slice(iHeadEnd,iFooterStart)+fileStr.slice(iFooterEnd);
 
