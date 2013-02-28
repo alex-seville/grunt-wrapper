@@ -40,9 +40,9 @@ module.exports = function(grunt) {
           var newDest = path.join(filePair.dest, src);
 
           var iHeadStart = fileStr.indexOf(startHeadContent),
-              iHeadEnd = fileStr.indexOf(endHeadContent),
+              iHeadEnd = fileStr.indexOf(endHeadContent,iHeadStart),
               iFooterStart = fileStr.indexOf(startFooterContent),
-              iFooterEnd = fileStr.indexOf(endFooterContent),
+              iFooterEnd = fileStr.indexOf(endFooterContent,iFooterStart),
               iInsertHead = header.indexOf(insertHeadContent),
               iInsertFooter = footer.indexOf(insertFooterContent);
 
@@ -51,6 +51,8 @@ module.exports = function(grunt) {
 
           var newHeader = header.slice(0,iInsertHead)+contentHeader+header.slice(iInsertHead),
               newFooter = footer.slice(0,iInsertFooter)+contentFooter+footer.slice(iInsertFooter);
+
+          fileStr = fileStr.slice(0,iHeadStart)+fileStr.slice(iHeadEnd,iFooterStart)+fileStr.slice(iFooterEnd);
 
           grunt.file.write(newDest,newHeader+fileStr+newFooter);
           grunt.log.writeln('Wrote file:'+newDest);

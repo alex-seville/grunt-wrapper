@@ -29,9 +29,9 @@ module.exports = function(grunt) {
       default_options: {
         options: {
           header: 'LICENSE-MIT',
-          footer: 'package.json',
+          footer: 'LICENSE-MIT',
           headDelimiter: ['// Please',' // creation','Permission'],
-          footerDelimiter: ['Wrote','newDest','repository']
+          footerDelimiter: ['Wrote','newDest','Permission']
         },
         files: {
           'tmp/': [ 'tasks/*.js']
