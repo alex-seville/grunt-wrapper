@@ -29,10 +29,12 @@ module.exports = function(grunt) {
       default_options: {
         options: {
           header: 'LICENSE-MIT',
-          footer: 'package.json'
+          footer: 'package.json',
+          headDelimiter: ['// Please',' // creation','Permission'],
+          footerDelimiter: ['Wrote','newDest','repository']
         },
         files: {
-          'tmp/': [ 'node_modules/**/*.js']
+          'tmp/': [ 'tasks/*.js']
         },
       }
     },
