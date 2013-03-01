@@ -26,12 +26,26 @@ module.exports = function(grunt) {
 
     // Configuration to be run (and then tested).
     wrap: {
+      options:{
+         headDelimiter: ['// Please',' // creation','Permission'],
+          footerDelimiter: ['Wrote','newDest','Permission']
+        },
       default_options: {
         options: {
           header: 'LICENSE-MIT',
-          footer: 'LICENSE-MIT',
-          headDelimiter: ['// Please',' // creation','Permission'],
-          footerDelimiter: ['Wrote','newDest','Permission']
+          footer: 'LICENSE-MIT'
+         
+        },
+        files: {
+          'tmp/': [ 'tasks/*.js']
+        },
+      },
+      default_options2: {
+        options: {
+           footerDelimiter: [""],
+          header: 'LICENSE-MIT',
+          footer: 'LICENSE-MIT'
+         
         },
         files: {
           'tmp/': [ 'tasks/*.js']

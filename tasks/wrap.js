@@ -19,12 +19,13 @@ module.exports = function(grunt) {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options();
 
+    console.log("Options:",options);
 
     var dest;
     var isExpandedPair;
 
-    var header = options.header ? grunt.file.read(options.header) : null;
-    var   footer = options.footer ? grunt.file.read(options.footer) : null;
+    var header = options.header ? grunt.file.read(options.header) : "";
+    var   footer = options.footer ? grunt.file.read(options.footer) : "";
 
     var startHeadContent = options.headDelimiter ? options.headDelimiter[0] : null,
           endHeadContent = options.headDelimiter ? options.headDelimiter[1] : null,
@@ -47,14 +48,16 @@ module.exports = function(grunt) {
               iFooterStart=0,
               iFooterEnd=0;
 
-          if (options.headDelimiter){
+          if (options.headDelimiter && options.headDelimiter.length === 3){
               iHeadStart = fileStr.indexOf(startHeadContent);
                 iHeadEnd = fileStr.indexOf(endHeadContent,iHeadStart);
               var iInsertHead = header.indexOf(insertHeadContent);
                 var contentHeader = fileStr.slice(iHeadStart,iHeadEnd);
                  newHeader = header.slice(0,iInsertHead)+contentHeader+header.slice(iInsertHead);
+
+                 iFooterEnd = iHeadEnd;
           }
-          if (options.footerDelimiter){
+          if (options.footerDelimiter && options.footerDelimiter.length === 3){
               iFooterStart = fileStr.indexOf(startFooterContent);
               iFooterEnd = fileStr.indexOf(endFooterContent,iFooterStart);
            
@@ -62,7 +65,7 @@ module.exports = function(grunt) {
              var contentFooter = fileStr.slice(iFooterStart,iFooterEnd);
              newFooter = footer.slice(0,iInsertFooter)+contentFooter+footer.slice(iInsertFooter);
            }       
-
+          
           fileStr = fileStr.slice(0,iHeadStart)+fileStr.slice(iHeadEnd,iFooterStart)+fileStr.slice(iFooterEnd);
 
           grunt.file.write(newDest,newHeader+fileStr+newFooter);
