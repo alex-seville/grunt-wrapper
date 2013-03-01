@@ -43,7 +43,8 @@ module.exports = function(grunt) {
       default_options2: {
         options: {
            footerDelimiter: [""],
-          header: 'LICENSE-MIT',
+            headDelimiter: [""],
+          header: '',
           footer: 'LICENSE-MIT'
          
         },

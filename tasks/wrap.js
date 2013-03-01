@@ -17,9 +17,10 @@ module.exports = function(grunt) {
 
   grunt.registerMultiTask('wrap', 'Your task description goes here.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options();
-
-    console.log("Options:",options);
+       var options = this.options({
+      headDelimiter: [""],
+      footerDelimiter: [""]
+    });
 
     var dest;
     var isExpandedPair;
@@ -27,12 +28,12 @@ module.exports = function(grunt) {
     var header = options.header ? grunt.file.read(options.header) : "";
     var   footer = options.footer ? grunt.file.read(options.footer) : "";
 
-    var startHeadContent = options.headDelimiter ? options.headDelimiter[0] : null,
-          endHeadContent = options.headDelimiter ? options.headDelimiter[1] : null,
-       insertHeadContent = options.headDelimiter ? options.headDelimiter[2] : null,
-       startFooterContent = options.footerDelimiter ? options.footerDelimiter[0] : null,
-        endFooterContent = options.footerDelimiter ? options.footerDelimiter[1] : null,
-     insertFooterContent = options.footerDelimiter ? options.footerDelimiter[2] : null;
+    var startHeadContent = options.headDelimiter.length === 3 ? options.headDelimiter[0] : null,
+          endHeadContent = options.headDelimiter.length === 3 ? options.headDelimiter[1] : null,
+       insertHeadContent = options.headDelimiter.length === 3 ? options.headDelimiter[2] : null,
+       startFooterContent = options.footerDelimiter.length === 3 ? options.footerDelimiter[0] : null,
+        endFooterContent = options.footerDelimiter.length === 3 ? options.footerDelimiter[1] : null,
+     insertFooterContent = options.footerDelimiter.length === 3 ? options.footerDelimiter[2] : null;
 
     this.files.forEach(function(filePair) {
    
@@ -48,7 +49,7 @@ module.exports = function(grunt) {
               iFooterStart=0,
               iFooterEnd=0;
 
-          if (options.headDelimiter && options.headDelimiter.length === 3){
+          if (options.headDelimiter.length === 3){
               iHeadStart = fileStr.indexOf(startHeadContent);
                 iHeadEnd = fileStr.indexOf(endHeadContent,iHeadStart);
               var iInsertHead = header.indexOf(insertHeadContent);
@@ -57,7 +58,7 @@ module.exports = function(grunt) {
 
                  iFooterEnd = iHeadEnd;
           }
-          if (options.footerDelimiter && options.footerDelimiter.length === 3){
+          if (options.footerDelimiter.length === 3){
               iFooterStart = fileStr.indexOf(startFooterContent);
               iFooterEnd = fileStr.indexOf(endFooterContent,iFooterStart);
            
@@ -65,7 +66,7 @@ module.exports = function(grunt) {
              var contentFooter = fileStr.slice(iFooterStart,iFooterEnd);
              newFooter = footer.slice(0,iInsertFooter)+contentFooter+footer.slice(iInsertFooter);
            }       
-          
+
           fileStr = fileStr.slice(0,iHeadStart)+fileStr.slice(iHeadEnd,iFooterStart)+fileStr.slice(iFooterEnd);
 
           grunt.file.write(newDest,newHeader+fileStr+newFooter);
